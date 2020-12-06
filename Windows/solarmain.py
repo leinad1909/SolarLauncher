@@ -23,7 +23,7 @@ config['SETUP'] = {}
 
 window.title("Solar Launcher")
 window.geometry("400x350")
-window.iconbitmap(os.path.join((os.path.dirname(__file__)), "icon.ico"))
+window.iconbitmap(os.getcwd() +"\icon.ico")
 
 window.configure(bg = bgdefault)
 
