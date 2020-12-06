@@ -13,10 +13,13 @@ You will need the three files (icon.ico, solar.launchersettings and solarmain.py
  - ConfigParser (pip: configparser)
  - feedparser (pip: feedparser)
  
- On Linux, you may need to make a few changes to solarmain.py (regarding suprocess commands and removing .exe from some things). I'll probably make a Linux specific version at      some point.
- 
  Executable releases for both Linux and Windows should be out at some point soon.
  
  If you want to change options (like the appearance style and Planet Game install location) you can use the text file "solar.launcherproperties". I am trying to make it so you don't actually need to go into the main code to change stuff, and am working towards making it so you can modify most things from the "solar.launcherproperties" file.
+ 
+# Future Plans
+- Add a "Saved Servers" menu where you can save a server with a name and IP
+- Add a more fleshed out options menu with stuff like visual appearance/themes
+- Online server browser that people can publically add their server to for other people to connect
  
  I don't really care what you do with the code, feel free to reuse it or change it however you want.
