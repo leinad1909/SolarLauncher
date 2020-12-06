@@ -23,7 +23,8 @@ config['SETUP'] = {}
 
 window.title("Solar Launcher")
 window.geometry("400x350")
-window.iconbitmap(os.getcwd() +"\icon.ico")
+icon = tk.PhotoImage(file = "icon.gif")
+window.iconphoto(True, icon)
 
 window.configure(bg = bgdefault)
 
