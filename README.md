@@ -8,7 +8,7 @@ Solar Launcher is a program that provides a user interface to connecting to a se
 Running from the .py file:
 You will need the three files (icon.ico, solar.launchersettings and solarmain.py) to all be in the same directory. It should be as simple as ensuring you have the following includes and running the script:
 
- - tkinter (apt: python-tkinter, should be preinstalled on Windows)
+ - tkinter (apt: python3-tk, should be preinstalled on Windows)
  - ttkthemes (pip: ttkthemes)
  - ConfigParser (pip: configparser)
  - feedparser (pip: feedparser)
