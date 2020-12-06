@@ -64,7 +64,7 @@ def LoadUpdateFeed():
 def LaunchClient():
     config.read('solar.launchersettings')
     clientsavedlocation = (config['SETUP']['clientlocation'])
-    launchcommand = "./" +clientsavedlocation +" " +ipentry.get()
+    launchcommand = clientsavedlocation +" " +ipentry.get()
     print("Opening " +launchcommand)
     subprocess.call(launchcommand)
     window.destroy()
