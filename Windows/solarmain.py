@@ -1,5 +1,5 @@
 # SOLAR LAUNCHER - UNOFFICIAL LAUNCHER FOR PLANET GAME (github.com/Jachdich/planet-client, github.com/Jachdich/planet-server)
-# THIS VERSION ONLY WORKS ON WINDOWS. I know it's messy, but it runs and for now that's all I'm aiming for.
+# THIS VERSION ONLY WORKS ON WINDOWS
 
 import tkinter as tk
 import webbrowser as web
@@ -68,28 +68,6 @@ def LaunchClient():
     subprocess.call(launchcommand)
     window.destroy()
 
-# def OpenOptionsMenu(): - WORK IN PROGRESS
-#     config['STYLE']['CurrentStyle'] = Dark
-#     with open('solar.launchersettings', 'w') as configfile:
-#         config.write(configfile)
-
-#     optionsmenu = tk.Toplevel(window, bg = bgdefault)
-#     optionsmenu.geometry('400x300')
-#     optionstitle = ttk.Label(optionsmenu, text = "Options", font = 'Helvetica 30').grid(row = 0, column = 0)
-#     divider = ttk.Label(optionsmenu, text = " ", font = "Unispace 10 bold").grid(row = 1, column = 0)
-
-#     optionspanel = tk.Frame(optionsmenu, highlightbackground = fgdefault, highlightthickness = 1, bg = bgdefault)
-#     optionspanel.grid(column = 0, row = 2)
-#     appearancebutton = ttk.Button(optionspanel, text = 'Appearance').pack()
-#     devbutton = ttk.Button(optionspanel, text = 'Developer').pack()
-
-#     appearancepanel = tk.Frame(optionsmenu, highlightbackground = fgdefault, highlightthickness = 1, bg = bgdefault)
-#     appearancepanel.grid(column = 1, row = 2)
-#     appearancepaneltitle = ttk.Label(appearancepanel, text = 'Appearance Settings', font = 'Helvetica 10 underline').grid(row = 0, column = 0)
-#     stylelabel = ttk.Label(appearancepanel, text = 'Style: ').grid(row = 1, column = 0)
-#     styleselect = ttk.OptionMenu(appearancepanel, 'Dark (default)', 'Light', 'Windows')
-#     styleselect.grid(row = 1, column = 1)
-
 #About Menu
 aboutmenu = tk.Menu(menubar)
 menubar.add_cascade(label = "About", menu = aboutmenu)
@@ -106,7 +84,6 @@ setupmenu.add_command(label = "Set planet-server install location", command = Se
 optionsmenu = tk.Menu(menubar)
 menubar.add_cascade(label = "Options", menu = optionsmenu)
 optionsmenu.add_command(label = "Refresh commit updates", command = LoadUpdateFeed)
-#optionsmenu.add_command(label = "Options menu", command = OpenOptionsMenu) - WIP
 
 #Title
 title = ttk.Label(text = "Solar Launcher", font = "GENISO 40").pack()
