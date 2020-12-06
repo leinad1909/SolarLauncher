@@ -2,3 +2,6 @@
 clientlocation = NONE
 serverlocation = NONE
 
+[STYLE]
+currenttheme = Dark
+
