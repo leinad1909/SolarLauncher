@@ -1,5 +1,5 @@
 # SolarLauncher
-Unofficial launcher for Planet Game (github.com/Jachdich/planet-client)
+Unofficial launcher for Planet Game (https://github.com/Jachdich/planet-client/)
 Still very much work in progress.
 
 Solar Launcher is a program that provides a user interface to connecting to a server in Planet Game.
