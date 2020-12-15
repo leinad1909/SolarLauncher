@@ -1,0 +1,12 @@
+[CONFIG]
+currenttheme = DARK
+
+[DARK]
+ttktheme = equilux
+background = #464646
+foreground = #a6a6a6
+
+[LIGHT]
+ttktheme = arc
+background = #F5F6F7
+foreground = #000000
