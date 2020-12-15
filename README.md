@@ -21,7 +21,6 @@ You will need the three files (icon.ico, solar.launchersettings and solarmain.py
  If you want to change options (like the appearance style and Planet Game install location) you can use the text file "solar.launcherproperties". I am trying to make it so you don't actually need to go into the main code to change stuff, and am working towards making it so you can modify most things from the "solar.launcherproperties" file.
  
 ## Future Plans
-- Add a "Saved Servers" menu where you can save a server with a name and IP
 - Online server browser that people can publically add their server to for other people to connect
 - Texture pack switching and possibly online texture pack browser
  
