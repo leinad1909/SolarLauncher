@@ -1,5 +1,3 @@
-# Windows executable is a bit broken. Please avoid using Saved Servers functionality or use the Python source until it is fixed.
-
 # Solar Launcher
 Unofficial launcher for [Planet Game](https://github.com/Jachdich/planet-client/).
 Still very much work in progress.
