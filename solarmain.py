@@ -1,11 +1,11 @@
-
 # SOLAR LAUNCHER - UNOFFICIAL LAUNCHER FOR PLANET GAME (github.com/Jachdich/planet-client, github.com/Jachdich/planet-server)
 # THIS VERSION ONLY WORKS ON WINDOWS
 
-SOLAR_VERSION = 1.0
+SOLAR_VERSION = 1.1
 
-import urllib.request, os, configparser, feedparser, subprocess, sys, logging, datetime, re
-import solarservers
+import urllib.request, os, configparser, feedparser, sys, logging, datetime, re
+from subprocess import call
+import solarservers, solarthemes
 import tkinter as tk
 from tkinter import ttk, filedialog, font, messagebox
 import webbrowser as web
@@ -21,12 +21,14 @@ logging.basicConfig(filename="log.solar", encoding="utf-8", level=logging.DEBUG)
 
 #Translate theme names into actual stuff that can be used
 config = configparser.ConfigParser()
-config.read("themes.solar")
-theme = config["CONFIG"]["currenttheme"]
-bgdefault = config[theme]["background"]
-fgdefault = config[theme]["foreground"]
-ttktheme = config[theme]["ttktheme"]
-LogFormat("Using theme: " +theme +" " +bgdefault +" " +fgdefault +" " +ttktheme)
+with open("settings.solar", "r") as configfile:
+    config.read_file(configfile)
+    theme = config["STYLE"]["currenttheme"]
+    getthemeinfo = solarthemes.Themes(theme)
+    themedetails = getthemeinfo.ThemeInfo()
+    ttktheme = themedetails[0]
+    bgdefault = themedetails[1]
+    fgdefault = themedetails[2]
 
 #Configuring tkinter window
 window = ThemedTk(theme = ttktheme)
@@ -55,8 +57,9 @@ class SetLocation:
             tk.messagebox.showwarning(title = "Solar Launcher - Warning", message = "This install location may be invalid. Proceed with caution.")
 
 def InstallLocationWarning():
-    config.read("settings.solar")
-    clientsavedlocation = (config["SETUP"]["clientlocation"])
+    with open("settings.solar", "r") as configfile:
+        config.read_file(configfile)
+        clientsavedlocation = (config["SETUP"]["clientlocation"])
     LogFormat("Install Location: " +clientsavedlocation)
     if "planet-client" not in str(clientsavedlocation):
         locationwarning = tk.messagebox.askyesno(title = "Solar Launcher", message = "Solar Launcher has detected an invalid or missing install location for planet-client. Would you like to set a new one now?")
@@ -89,33 +92,29 @@ def LaunchClient():
     try:
         subprocess.call(launchcommand)
         window.destroy()
-    except FileNotFoundError:
+    except FileNotFoundError or OSError:
         tk.messagebox.showerror(title = "Solar Launcher - Error", message = "No planet-client install location specified. Please set a location under the Setup menu tab.")
 
-def ChangeTheme(t):
-    config["STYLE"]["currenttheme"] = t
-    with open("settings.solar", "w") as configfile:
-        config.write(configfile)
-    tk.messagebox.showwarning(title = "Solar Launcher", message = "Please restart Solar Launcher for changes to take effect.")
-    return
+class OptionsMenu():
+    def __init__(self):
+        self.optionsmenu = tk.Toplevel(window, bg = bgdefault)
+        self.optionsmenu.geometry("400x300")
+        ttk.Label(self.optionsmenu, text = "Options", font = "Helvetica 20").pack()
+        ttk.Label(self.optionsmenu, text = " ", font = "Unispace 10 bold").pack()
+        ttk.Label(self.optionsmenu, text = "Appearance Settings", font = "Helvetica 10 underline").pack()
+        ttk.Label(self.optionsmenu, text = "Theme: ").pack(anchor = tk.W, padx = 10, pady = 8)
+        self.stylevariable = tk.StringVar()
+        self.stylevariable.set(theme)
+        ttk.Radiobutton(self.optionsmenu, text = "DARK", variable = self.stylevariable, value = "DARK", command = self.ChangeTheme).pack(anchor = tk.W, padx = 20, pady = 2)
+        ttk.Radiobutton(self.optionsmenu, text = "LIGHT", variable = self.stylevariable, value = "LIGHT", command = self.ChangeTheme).pack(anchor = tk.W, padx = 20, pady = 2)
 
-def OpenOptionsMenu(s):
-    #Opens the options menu window
-    optionsmenu = tk.Toplevel(window, bg = bgdefault)
-    optionsmenu.geometry("400x300")
-    optionstitle = ttk.Label(optionsmenu, text = "Options", font = "Helvetica 20").pack()
-    divider = ttk.Label(optionsmenu, text = " ", font = "Unispace 10 bold").pack()
-
-    appearancetitle = ttk.Label(optionsmenu, text = "Appearance Settings", font = "Helvetica 10 underline").pack()
-    stylelabel = ttk.Label(optionsmenu, text = "Theme: ").pack(anchor = tk.W, padx = 10, pady = 8)
-
-    stylevariable = tk.IntVar()
-    if s == "DARK":
-        stylevariable.set(1)
-    elif s == "LIGHT":
-        stylevariable.set(2)
-    ttk.Radiobutton(optionsmenu, text = "Dark", variable = stylevariable, value = 1, command = (lambda t = "DARK": ChangeTheme(t))).pack(anchor = tk.W, padx = 20, pady = 2)
-    ttk.Radiobutton(optionsmenu, text = "Light", variable = stylevariable, value = 2, command = (lambda t = "LIGHT": ChangeTheme(t))).pack(anchor = tk.W, padx = 20, pady = 2)
+    def ChangeTheme(self):
+        with open("settings.solar", "r") as configfile:
+            config.read_file(configfile)
+            config["STYLE"]["currenttheme"] = self.stylevariable.get()
+        with open("settings.solar", "w") as configfile:
+            config.write(configfile)
+        tk.messagebox.showwarning(title = "Solar Launcher", message = "Please restart Solar Launcher for changes to take effect.")
 
 class SavedServersMenu:
     def __init__(self, window):
@@ -126,10 +125,15 @@ class SavedServersMenu:
         except TypeError:
             self.servernames = {"None":""}
         self.windowopen = False
+        self.selectedserver = tk.StringVar()
 
     def InsertSavedServer(self):
         self.solargetdetails = solarservers.ManageServers(self.selectedserver.get())
         ipaddress.set(self.solargetdetails.GetServerDetails()["ip"])
+
+    def RemoveServer(self):
+        self.solargetdetails = solarservers.ManageServers(self.selectedserver.get())
+        self.solargetdetails.DeleteServer()
 
     def SaveServer(self):
         self.serversconfig = solarservers.ManageServers(self.newservernametext.get(), self.newserveriptext.get())
@@ -137,11 +141,17 @@ class SavedServersMenu:
 
     def CreateWindow(self):
         serversmenu = tk.Toplevel(self.window, bg = bgdefault)
-        serversmenu.geometry("280x240")
-        self.selectedserver = tk.StringVar()
-        self.serversselect = ttk.OptionMenu(serversmenu, self.selectedserver, "Select a saved server...", *self.servernames)
-        self.serversselect.pack(pady = 10)
-        self.applyaddress = ttk.Button(serversmenu, text = "Apply", command = self.InsertSavedServer).pack()
+        serversmenu.geometry("340x220")
+        
+        self.serverselectframe = tk.Frame(serversmenu, bg = bgdefault)
+
+        self.serversselect = ttk.OptionMenu(self.serverselectframe, self.selectedserver, "Select a saved server...", *self.servernames)
+        self.serversselect.pack(pady = 10, padx = 5, side = tk.LEFT)
+        ttk.Button(self.serverselectframe, text = "Apply", command = self.InsertSavedServer).pack(side = tk.LEFT)
+        ttk.Button(self.serverselectframe, text = "Delete", command = self.RemoveServer).pack(side = tk.LEFT)
+
+        self.serverselectframe.pack(side = tk.TOP)
+
         ttk.Label(serversmenu, text = "Add a new saved server:").pack(pady = 10, padx = 5, anchor = tk.W)
 
         self.newservernameframe = tk.Frame(serversmenu, bg = bgdefault)
@@ -159,6 +169,8 @@ class SavedServersMenu:
         self.newserverip.pack(side = tk.RIGHT)
 
         ttk.Button(serversmenu, text = "Save Server", command = self.SaveServer).pack(pady = 5)
+
+        ttk.Label(serversmenu, text = "Any changes made here will update after launcher restart.").pack()
 
 
 def UpdateCheck():
@@ -186,6 +198,7 @@ aboutmenu = tk.Menu(menubar)
 menubar.add_cascade(label = "About", menu = aboutmenu)
 aboutmenu.add_command(label = "planet-client on GitHub", command = (lambda l = "https://github.com/Jachdich/planet-client": web.open(l)))
 aboutmenu.add_command(label = "planet-server on GitHub", command = (lambda l = "https://github.com/Jachdich/planet-server": web.open(l)))
+aboutmenu.add_command(label = "Solar Launcher on GitHub", command = (lambda l = "https://github.com/NeptuniteDaniel/SolarLauncher": web.open(l)))
 
 #Setup Menu
 setupmenu = tk.Menu(menubar)
@@ -197,7 +210,8 @@ setupmenu.add_command(label = "Set planet-server install location", command = se
 #Options Menu
 optionsmenu = tk.Menu(menubar)
 menubar.add_cascade(label = "Options", menu = optionsmenu)
-optionsmenu.add_command(label = "Options menu", command = (lambda s = theme: OpenOptionsMenu(s)))
+optionsopen = OptionsMenu
+optionsmenu.add_command(label = "Options menu", command = optionsopen)
 
 #Title
 ttk.Label(text = "Solar Launcher", font = "GENISO 40").pack()

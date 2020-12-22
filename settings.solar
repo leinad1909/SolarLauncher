@@ -1,6 +1,7 @@
-[CONFIG]
-currenttheme = DARK
-
 [SETUP]
 clientlocation = 
 serverlocation = 
+
+[STYLE]
+currenttheme = DARK
+

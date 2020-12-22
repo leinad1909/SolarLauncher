@@ -1,6 +1,3 @@
-[CONFIG]
-currenttheme = DARK
-
 [DARK]
 ttktheme = equilux
 background = #464646

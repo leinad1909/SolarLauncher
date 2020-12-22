@@ -21,9 +21,23 @@ class ManageServers():
             return self.serverdetails
 
     def AddNewServer(self):
-        with open('servers.solar', 'a') as configfile:
+        if self.servername in self.ServerSearch():
+            self.filemode = "w"
+            print("yes")
+        else:
+            print("no")
+            self.filemode = "a"
+        with open('servers.solar', self.filemode) as configfile:
             if self.servername not in self.ServerSearch():
                 self.config[self.servername] = {"ip": self.serverip}
                 self.config.write(configfile)
 
-manageservers = ManageServers()
+    def DeleteServer(self):
+        with open("servers.solar", "r") as configfile:
+            self.config.read_file(configfile)
+        self.config.remove_section(self.servername)
+        with open("servers.solar", "w") as configfile:
+            self.config.write(configfile)
+
+manageservers = ManageServers("test", "other")
+manageservers.DeleteServer
