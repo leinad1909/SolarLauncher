@@ -1,3 +1,5 @@
+# This is a project I worked on while first getting to grips with programming. It may or may not work but I will not provide any support and will no longer be updated in its current form.
+
 # Solar Launcher
 Unofficial launcher for [Planet Game](https://github.com/Jachdich/planet-client/).
 Still very much work in progress.
